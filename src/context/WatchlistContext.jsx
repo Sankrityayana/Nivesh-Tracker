@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 const STORAGE_KEY = 'nivesh_watchlist'
@@ -25,19 +26,22 @@ export function WatchlistProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(watchlistIds))
   }, [watchlistIds])
 
-  const value = useMemo(() => ({
-    watchlistIds,
-    toggleWatchlist: (coinId) => {
-      setWatchlistIds((current) => {
-        if (current.includes(coinId)) {
-          return current.filter((id) => id !== coinId)
-        }
+  const value = useMemo(
+    () => ({
+      watchlistIds,
+      toggleWatchlist: (coinId) => {
+        setWatchlistIds((current) => {
+          if (current.includes(coinId)) {
+            return current.filter((id) => id !== coinId)
+          }
 
-        return [...current, coinId]
-      })
-    },
-    isInWatchlist: (coinId) => watchlistIds.includes(coinId),
-  }), [watchlistIds])
+          return [...current, coinId]
+        })
+      },
+      isInWatchlist: (coinId) => watchlistIds.includes(coinId),
+    }),
+    [watchlistIds],
+  )
 
   return <WatchlistContext.Provider value={value}>{children}</WatchlistContext.Provider>
 }

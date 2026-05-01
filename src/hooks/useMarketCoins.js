@@ -42,6 +42,7 @@ export function useMarketCoins({ vsCurrency = 'usd', page = 1, perPage = 50, ref
   )
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadCoins({ initial: true })
 
     const refreshTimer = setInterval(() => {

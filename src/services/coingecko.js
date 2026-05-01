@@ -41,7 +41,7 @@ export async function fetchMarketCoins(vsCurrency = 'usd', page = 1, perPage = 5
 
     return data.map(mapMarketCoin)
   } catch (error) {
-    throw new Error(resolveApiError(error))
+    throw new Error(resolveApiError(error), { cause: error })
   }
 }
 
@@ -70,7 +70,7 @@ export async function fetchCoinDetails(id) {
       total_supply: data.market_data?.total_supply,
     }
   } catch (error) {
-    throw new Error(resolveApiError(error))
+    throw new Error(resolveApiError(error), { cause: error })
   }
 }
 
@@ -89,6 +89,6 @@ export async function fetchTrendingCoins() {
       price_change_percentage_24h: item.data?.price_change_percentage_24h?.usd,
     }))
   } catch (error) {
-    throw new Error(resolveApiError(error))
+    throw new Error(resolveApiError(error), { cause: error })
   }
 }

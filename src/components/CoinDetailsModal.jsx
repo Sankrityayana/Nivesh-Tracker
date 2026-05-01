@@ -80,7 +80,7 @@ function CoinDetailsModal({ coinId, onClose }) {
               <div>
                 <p className="text-lg font-semibold text-white">{coin.name}</p>
                 <p className="text-sm uppercase text-slate-400">
-                  {coin.symbol} {coin.rank ? `• Rank #${coin.rank}` : ''}
+                  {coin.symbol} {coin.rank ? `ï¿½ Rank #${coin.rank}` : ''}
                 </p>
               </div>
             </div>
