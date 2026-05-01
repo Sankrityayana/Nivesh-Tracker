@@ -1,40 +1,27 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import CoinTable from '../components/CoinTable'
 import DashboardControls from '../components/DashboardControls'
 import DashboardHeader from '../components/DashboardHeader'
 import EmptyState from '../components/EmptyState'
 import LoadingSkeleton from '../components/LoadingSkeleton'
+import RefreshStatus from '../components/RefreshStatus'
 import { useWatchlist } from '../context/WatchlistContext'
-import { fetchMarketCoins } from '../services/coingecko'
+import { useMarketCoins } from '../hooks/useMarketCoins'
 import { applyCoinFiltersAndSort } from '../utils/sortFilter'
 
 function DashboardPage() {
-  const [coins, setCoins] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('marketCapDesc')
   const [watchlistOnly, setWatchlistOnly] = useState(false)
   const [selectedCoinId, setSelectedCoinId] = useState(null)
   const { watchlistIds, toggleWatchlist } = useWatchlist()
 
-  useEffect(() => {
-    async function loadCoins() {
-      setLoading(true)
-      setError('')
-
-      try {
-        const marketCoins = await fetchMarketCoins('usd', 1, 50)
-        setCoins(marketCoins)
-      } catch (loadError) {
-        setError(loadError.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadCoins()
-  }, [])
+  const { coins, loading, error, warning, refreshing, lastUpdated } = useMarketCoins({
+    vsCurrency: 'usd',
+    page: 1,
+    perPage: 50,
+    refreshInterval: 20000,
+  })
 
   const watchlistSet = useMemo(() => new Set(watchlistIds), [watchlistIds])
 
@@ -59,6 +46,9 @@ function DashboardPage() {
           watchlistOnly={watchlistOnly}
           onWatchlistOnlyChange={setWatchlistOnly}
         />
+        {!loading && !error && (
+          <RefreshStatus lastUpdated={lastUpdated} refreshing={refreshing} warning={warning} />
+        )}
 
         {loading && <LoadingSkeleton />}
         {!loading && error && <EmptyState message={error} />}
