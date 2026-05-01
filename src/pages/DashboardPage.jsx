@@ -5,6 +5,7 @@ import DashboardControls from '../components/DashboardControls'
 import DashboardHeader from '../components/DashboardHeader'
 import EmptyState from '../components/EmptyState'
 import LoadingSkeleton from '../components/LoadingSkeleton'
+import MarketHighlights from '../components/MarketHighlights'
 import RefreshStatus from '../components/RefreshStatus'
 import { useWatchlist } from '../context/WatchlistContext'
 import { useMarketCoins } from '../hooks/useMarketCoins'
@@ -37,7 +38,7 @@ function DashboardPage() {
 
   return (
     <>
-      <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-10">
+      <main className="min-h-screen px-3 py-6 sm:px-6 sm:py-8 lg:px-10">
         <div className="mx-auto max-w-7xl">
           <DashboardHeader />
           <DashboardControls
@@ -49,7 +50,10 @@ function DashboardPage() {
             onWatchlistOnlyChange={setWatchlistOnly}
           />
           {!loading && !error && (
-            <RefreshStatus lastUpdated={lastUpdated} refreshing={refreshing} warning={warning} />
+            <>
+              <RefreshStatus lastUpdated={lastUpdated} refreshing={refreshing} warning={warning} />
+              <MarketHighlights coins={visibleCoins} />
+            </>
           )}
 
           {loading && <LoadingSkeleton />}
