@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import CoinDetailsModal from '../components/CoinDetailsModal'
 import CoinTable from '../components/CoinTable'
 import DashboardControls from '../components/DashboardControls'
 import DashboardHeader from '../components/DashboardHeader'
@@ -35,42 +36,42 @@ function DashboardPage() {
   )
 
   return (
-    <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-7xl">
-        <DashboardHeader />
-        <DashboardControls
-          searchValue={searchQuery}
-          onSearchChange={setSearchQuery}
-          sortValue={sortBy}
-          onSortChange={setSortBy}
-          watchlistOnly={watchlistOnly}
-          onWatchlistOnlyChange={setWatchlistOnly}
-        />
-        {!loading && !error && (
-          <RefreshStatus lastUpdated={lastUpdated} refreshing={refreshing} warning={warning} />
-        )}
-
-        {loading && <LoadingSkeleton />}
-        {!loading && error && <EmptyState message={error} />}
-        {!loading && !error && visibleCoins.length === 0 && (
-          <EmptyState message="No matching coins found." />
-        )}
-        {!loading && !error && visibleCoins.length > 0 && (
-          <CoinTable
-            coins={visibleCoins}
-            watchlistIds={watchlistSet}
-            onToggleWatchlist={toggleWatchlist}
-            onSelectCoin={setSelectedCoinId}
+    <>
+      <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-10">
+        <div className="mx-auto max-w-7xl">
+          <DashboardHeader />
+          <DashboardControls
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            sortValue={sortBy}
+            onSortChange={setSortBy}
+            watchlistOnly={watchlistOnly}
+            onWatchlistOnlyChange={setWatchlistOnly}
           />
-        )}
+          {!loading && !error && (
+            <RefreshStatus lastUpdated={lastUpdated} refreshing={refreshing} warning={warning} />
+          )}
 
-        {selectedCoinId && (
-          <p className="mt-3 text-xs text-slate-400">
-            Selected coin: <span className="text-slate-200">{selectedCoinId}</span>
-          </p>
-        )}
-      </div>
-    </main>
+          {loading && <LoadingSkeleton />}
+          {!loading && error && <EmptyState message={error} />}
+          {!loading && !error && visibleCoins.length === 0 && (
+            <EmptyState message="No matching coins found." />
+          )}
+          {!loading && !error && visibleCoins.length > 0 && (
+            <CoinTable
+              coins={visibleCoins}
+              watchlistIds={watchlistSet}
+              onToggleWatchlist={toggleWatchlist}
+              onSelectCoin={setSelectedCoinId}
+            />
+          )}
+        </div>
+      </main>
+
+      {selectedCoinId && (
+        <CoinDetailsModal coinId={selectedCoinId} onClose={() => setSelectedCoinId(null)} />
+      )}
+    </>
   )
 }
 
