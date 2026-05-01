@@ -36,6 +36,12 @@ function DashboardPage() {
     [coins, searchQuery, sortBy, watchlistOnly, watchlistSet],
   )
 
+  function clearFilters() {
+    setSearchQuery('')
+    setSortBy('marketCapDesc')
+    setWatchlistOnly(false)
+  }
+
   return (
     <>
       <main className="min-h-screen px-3 py-6 sm:px-6 sm:py-8 lg:px-10">
@@ -48,6 +54,7 @@ function DashboardPage() {
             onSortChange={setSortBy}
             watchlistOnly={watchlistOnly}
             onWatchlistOnlyChange={setWatchlistOnly}
+            onClearFilters={clearFilters}
           />
           {!loading && !error && (
             <>
